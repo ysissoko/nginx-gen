@@ -24,19 +24,19 @@ NginxGen is a utility built with Plop.js that generates dynamic Nginx reverse pr
 
 ## **Installation**
 Clone or download this repository.
-    ```bash
-    git clone https://github.com/yourusername/nginxgen.git
-    cd nginxgen
-   ```
+```bash
+git clone https://github.com/yourusername/nginxgen.git
+cd nginxgen
+```
 
 ---
 
 ## **Usage**
 
 1. Run the generator using Plop.js:
-   ```bash
-   npx plop
-   ```
+```bash
+npx plop
+```
 
 2. Follow the prompts to configure your Nginx file:
     - The input data filename with your servers configurations
