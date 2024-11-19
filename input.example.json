@@ -9,7 +9,9 @@
             "privKeyFilepath": "path/to/privkey/privatekey.pem"
         },
         "deployment": {
-            "privKeyFilepath": "~/.ssh/id_rsa"
+            "privKeyFilepath": "~/.ssh/id_rsa",
+            "repo": "app1",
+            "owner": "ysissoko"
         }
     },
     {
@@ -22,7 +24,9 @@
             "privKeyFilepath": "path/to/privkey/privatekey.pem"
         },
         "deployment": {
-            "privKeyFilepath": "~/.ssh/id_rsa"
+            "privKeyFilepath": "~/.ssh/id_rsa",
+            "repo": "app1",
+            "owner": "ysissoko"
         }
     }
 ]
