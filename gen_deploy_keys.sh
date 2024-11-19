@@ -1,11 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 
 # Load Github personal access token
 source .env
 
 input_json=$1
+
+# Validate JSON
+if ! [ -f "$input_json" ]; then
+    echo "Input JSON file not found: $input_json"
+    exit 1
+fi
+
 # Get the total number of elements in the JSON array
 num_entries=$(jq 'length' $input_json)
+
+if [ "$num_entries" -eq 0 ]; then
+    echo "No entries in the JSON file."
+    exit 0
+fi
 
 function set_deploy_key() {
     key=$1 
@@ -46,13 +58,17 @@ for ((i = 0; i < num_entries; i++)); do
     repo=$(jq -r ".[$i].deployment.repo" $input_json)
     owner=$(jq -r ".[$i].deployment.owner" $input_json)
     name=$(jq -r ".[$i].name" $input_json)
-
+    echo "filename: $filename, repo: $repo, owner: $owner, name: $name"
     # if key exists continue
-    [ -f ~/.ssh/$filename ] && echo "private key already exist ~/.ssh/$filename skipping...";continue
-
+    if [ -f ~/.ssh/$filename ]; then 
+	    echo "private key already exist ~/.ssh/$filename skipping..."
+	    continue
+    fi
+    
     ssh-keygen -t ed25519 -f ~/.ssh/$filename -q -P ""
     pubkey=$(cat ~/.ssh/$filename.pub)
 
     echo "Pubkey to deploy app $name: $pubkey"
     set_deploy_key "$pubkey" "$owner" "$repo" "$GH_TOKEN"
 done
+
