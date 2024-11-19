@@ -2,6 +2,6 @@
 Host {{name}}
     HostName github.com
     User git
-    IdentityFile {{deployment.privKeyFilename}}
+    IdentityFile ~/.ssh/{{deployment.privKeyFilename}}
     IdentitiesOnly yes
 {{/each}}
