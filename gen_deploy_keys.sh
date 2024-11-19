@@ -13,6 +13,8 @@ function set_deploy_key() {
     repo=$3 
     token=$4
 
+    echo "key: $key - owner: $owner - repo: $repo - token: $token"
+
     # Check if the key already exists
     existing_key=$(curl -s -H "Authorization: token $token" \
     -H "Accept: application/vnd.github+json" \
@@ -20,20 +22,22 @@ function set_deploy_key() {
     jq --arg key "$key" '.[] | select(.key == $key)')
 
     if [ -z "$existing_key" ]; then
-    echo "Key not found. Adding new deploy key..."
-    curl -s -X POST -H "Authorization: token $token" \
-        -H "Accept: application/vnd.github+json" \
-        -d @- https://api.github.com/repos/$owner/$repo/keys <<EOF
-    {
-    "title": "vps deploy key",
-    "key": "$key",
-    "read_only": true
-    }
+        echo "Key not found. Adding new deploy key..."
+        curl -s -X POST -H "Authorization: token $token" \
+            -H "Accept: application/vnd.github+json" \
+            -d @- https://api.github.com/repos/$owner/$repo/keys <<EOF
+        {
+        "title": "vps deploy key",
+        "key": "$key",
+        "read_only": true
+        }
 EOF
-        else
+    else
         echo "Key already exists. Skipping..."
-        fi
+    fi
 }
+
+echo "Deploy keys generation..."
 
 # generate a deploy key for each project and print it
 for ((i = 0; i < num_entries; i++)); do
@@ -44,11 +48,11 @@ for ((i = 0; i < num_entries; i++)); do
     name=$(jq -r ".[$i].name" $input_json)
 
     # if key exists continue
-    [ -f ~/.ssh/$filename ] && continue
+    [ -f ~/.ssh/$filename ] && echo "private key already exist ~/.ssh/$filename skipping...";continue
 
     ssh-keygen -t ed25519 -f ~/.ssh/$filename -q -P ""
     pubkey=$(cat ~/.ssh/$filename.pub)
 
     echo "Pubkey to deploy app $name: $pubkey"
-    set_deploy_key $pubkey $owner $repo $GH_TOKEN
+    set_deploy_key "$pubkey" "$owner" "$repo" "$GH_TOKEN"
 done

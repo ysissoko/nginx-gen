@@ -3,13 +3,13 @@
         "name": "app1",
         "host": "127.0.0.1",
         "port": "3001",
-        "domain": "app2.mansadev.com",
+        "domain": "app1.mansadev.com",
         "cert": {
             "certFilepath": "path/to/cert/fullchain.pem",
             "privKeyFilepath": "path/to/privkey/privatekey.pem"
         },
         "deployment": {
-            "privKeyFilepath": "~/.ssh/id_rsa",
+            "privKeyFilename": "app1_key",
             "repo": "app1",
             "owner": "ysissoko"
         }
@@ -24,7 +24,7 @@
             "privKeyFilepath": "path/to/privkey/privatekey.pem"
         },
         "deployment": {
-            "privKeyFilepath": "~/.ssh/id_rsa",
+            "privKeyFilename": "app2_key",
             "repo": "app1",
             "owner": "ysissoko"
         }
