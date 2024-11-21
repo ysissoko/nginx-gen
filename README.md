@@ -82,17 +82,31 @@ Here’s an example input:
             "name": "app1",
             "host": "127.0.0.1",
             "port": "3001",
-            "domain": "app2.mansadev.com",
-            "certFilepath": "path/to/cert/fullchain.pem",
-            "privKeyFilepath": "path/to/privkey/privatekey.pem"
+            "domain": "app1.mansadev.com",
+            "cert": {
+                "certFilepath": "path/to/cert/fullchain.pem",
+                "privKeyFilepath": "path/to/privkey/privatekey.pem"
+            },
+            "deployment": {
+                "privKeyFilename": "app1_key",
+                "repo": "app1",
+                "owner": "owner"
+            }
         },
         {
             "name": "app2",
             "host": "127.0.0.1",
             "port": "3002",
             "domain": "app2.mansadev.com",
-            "certFilepath": "path/to/cert/fullchain.pem",
-            "privKeyFilepath": "path/to/privkey/privatekey.pem"
+            "cert": {
+                "certFilepath": "path/to/cert/fullchain.pem",
+                "privKeyFilepath": "path/to/privkey/privatekey.pem"
+            },
+            "deployment": {
+                "privKeyFilename": "app2_key",
+                "repo": "app1",
+                "owner": "owner"
+            }
         }
     ]
    ```
@@ -131,6 +145,43 @@ http {
     }
 }
 ```
+
+---
+
+# GitHub Deploy Key Manager
+
+This script automates the generation and addition of deploy keys for GitHub repositories based on a provided JSON configuration file. It ensures each repository has a secure deploy key, avoiding duplicates where possible. The script is automatically executed by the `plop.js` file which defines an action to execute it after the config files generation.
+
+## Features
+
+- Reads a JSON configuration file to extract deployment details.
+- Generates new SSH keys if they do not already exist.
+- Adds public keys as deploy keys to the specified GitHub repositories via the GitHub API.
+- Skips adding deploy keys if they already exist for the repository.
+
+## Prerequisites
+
+1. **Environment Setup**:  
+   Create a `.env` file in the same directory as the script with the following content:
+   ```bash
+   export GH_TOKEN=<your_github_personal_access_token>
+
+---
+
+# Wildcard Subdomain TLS Certificate Generator
+
+The script script generates a wildcard TLS certificate for a specified subdomain using Certbot with DNS challenge verification.
+
+## Usage
+
+```bash
+    chmod +x ./gen_certs.sh
+    sudo ./gen_certs.sh <subdomain>
+```
+
+## Prerequisites
+- The script installs certbot and python3-certbot-nginx if they are not already installed.
+- You must have access to configure DNS records for the domain to complete the DNS challenge.
 
 ---
 
